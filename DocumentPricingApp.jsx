@@ -57,8 +57,8 @@ export default function DocumentPricingApp() {
                   className="border p-1 rounded"
                 >
                   <option value="bw">Black & White (2 PHP)</option>
-                  <option value="color_less">Color < Half (5 PHP)</option>
-                  <option value="color_more">Color > Half (8 PHP)</option>
+                  <option value="color_less">Color &lt; Half (5 PHP)</option>
+                  <option value="color_more">Color &gt; Half (8 PHP)</option>
                 </select>
               </div>
             ))}
