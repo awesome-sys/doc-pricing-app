@@ -1,7 +1,4 @@
 import React, { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 
 export default function DocumentPricingApp() {
   const [fileName, setFileName] = useState("");
@@ -41,31 +38,34 @@ export default function DocumentPricingApp() {
   return (
     <div className="p-6 max-w-2xl mx-auto space-y-4">
       <h1 className="text-2xl font-bold">📄 Document Price Calculator</h1>
-      <Input type="file" accept=".pdf,.docx" onChange={handleFileUpload} />
-      {fileName && <p className="text-sm text-gray-500">Uploaded: {fileName}</p>}
+      <input
+        type="file"
+        accept=".pdf,.docx"
+        onChange={handleFileUpload}
+        className="border p-2 rounded"
+      />
+      {fileName && <p className="text-sm text-gray-600">Uploaded: {fileName}</p>}
 
       {pageCount > 0 && (
-        <Card>
-          <CardContent className="space-y-4 p-4">
-            <h2 className="font-semibold">Select print type for each page:</h2>
-            {pages.map((type, index) => (
-              <div key={index} className="flex items-center gap-4">
-                <span>Page {index + 1}:</span>
-                <select
-                  value={type}
-                  onChange={(e) => handlePageChange(index, e.target.value)}
-                  className="border p-1 rounded"
-                >
-                  <option value="bw">Black & White (2 PHP)</option>
-                  <option value="color_less">Color &lt; Half (5 PHP)</option>
-                  <option value="color_more">Color &gt; Half (8 PHP)</option>
-                </select>
-              </div>
-            ))}
-            <div className="font-bold text-xl">Total Price: ₱{totalPrice}</div>
-            <Button>Submit Order</Button>
-          </CardContent>
-        </Card>
+        <div className="bg-white p-4 rounded shadow space-y-4">
+          <h2 className="font-semibold">Select print type for each page:</h2>
+          {pages.map((type, index) => (
+            <div key={index} className="flex items-center gap-4">
+              <span>Page {index + 1}:</span>
+              <select
+                value={type}
+                onChange={(e) => handlePageChange(index, e.target.value)}
+                className="border p-1 rounded"
+              >
+                <option value="bw">Black & White (2 PHP)</option>
+                <option value="color_less">Color &lt; Half (5 PHP)</option>
+                <option value="color_more">Color &gt; Half (8 PHP)</option>
+              </select>
+            </div>
+          ))}
+          <div className="font-bold text-xl">Total Price: ₱{totalPrice}</div>
+          <button className="bg-blue-600 text-white px-4 py-2 rounded">Submit Order</button>
+        </div>
       )}
     </div>
   );
