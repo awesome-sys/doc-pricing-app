@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import * as pdfjsLib from "pdfjs-dist";
+import "pdfjs-dist/build/pdf.worker.entry";
 
 export default function DocumentPricingApp() {
   const [fileName, setFileName] = useState("");
@@ -6,15 +8,23 @@ export default function DocumentPricingApp() {
   const [pages, setPages] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
 
-  const handleFileUpload = (e) => {
+  const handleFileUpload = async (e) => {
     const file = e.target.files[0];
-    if (file) {
+    if (file && file.type === "application/pdf") {
       setFileName(file.name);
-      // Dummy page count logic - replace with actual PDF/Word parser
-      const count = 5; // Assume 5 pages for now
-      setPageCount(count);
-      setPages(Array(count).fill("bw"));
-      calculatePrice(Array(count).fill("bw"));
+
+      const fileReader = new FileReader();
+      fileReader.onload = async function () {
+        const typedarray = new Uint8Array(this.result);
+        const pdf = await pdfjsLib.getDocument({ data: typedarray }).promise;
+        const count = pdf.numPages;
+        setPageCount(count);
+        setPages(Array(count).fill("bw"));
+        calculatePrice(Array(count).fill("bw"));
+      };
+      fileReader.readAsArrayBuffer(file);
+    } else {
+      alert("Please upload a PDF file only.");
     }
   };
 
@@ -40,7 +50,7 @@ export default function DocumentPricingApp() {
       <h1 className="text-2xl font-bold">📄 Document Price Calculator</h1>
       <input
         type="file"
-        accept=".pdf,.docx"
+        accept="application/pdf"
         onChange={handleFileUpload}
         className="border p-2 rounded"
       />
